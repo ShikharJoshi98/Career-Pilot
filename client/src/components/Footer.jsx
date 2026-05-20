@@ -4,7 +4,7 @@ import { navItems } from "../constants/Home";
 
 export function Footer() {
     return (
-        <footer className="flex w-full md:flex-row flex-col-reverse gap-8 md:gap-0 md:justify-between rounded-t-4xl  bg-blue-600 max-w-7xl px-12 mx-auto py-12">
+        <footer className="flex w-full md:flex-row flex-col-reverse gap-8 md:gap-0 md:justify-between rounded-t-4xl  bg-blue-700 max-w-7xl px-12 mx-auto py-12">
             <div className="flex flex-col gap-8">
                 <div className="flex items-center gap-6 text-white">
                     <FaGithub className="hover:text-white/70 cursor-pointer" />

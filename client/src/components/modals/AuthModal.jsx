@@ -1,8 +1,14 @@
-import { useState } from "react"
-import { LuCircleCheckBig, LuSparkles, LuX } from "react-icons/lu"
+import { useEffect, useState } from "react"
+import { LuCircleCheckBig, LuLoaderCircle, LuSparkles, LuX } from "react-icons/lu"
 import Input from "../Input";
+import { registerSchema } from "../../validations/authSchema";
+import { useDispatch, useSelector } from "react-redux";
+import { clearAuthState, registerRequest } from "../../modules/auth/authAction";
+import toast from "react-hot-toast";
 
 function AuthModal({ onClose, authMode }) {
+    const dispatch = useDispatch();
+    const { message, error, registerLoading } = useSelector((state) => state.auth);
     const [isMode, setMode] = useState(authMode);
     const [loginData, setLoginData] = useState({
         email: "",
@@ -16,6 +22,27 @@ function AuthModal({ onClose, authMode }) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [formError, setFormError] = useState("");
     const [loginError, setLoginError] = useState("");
+
+    useEffect(() => {
+        if (message) {
+            toast.success(message);
+
+            setRegisterData({
+                name: "",
+                email: "",
+                password: ""
+            });
+
+            setConfirmPassword("");
+
+            dispatch(clearAuthState());
+            return;
+        }
+        if (error) {
+            toast.error(error);
+            dispatch(clearAuthState());
+        }
+    }, [message, error, dispatch]);
 
     const handleChange = (e, mode) => {
         const { name, value } = e.target;
@@ -38,7 +65,17 @@ function AuthModal({ onClose, authMode }) {
     }
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
-        console.log(registerData);
+        const formData = {
+            ...registerData,
+            confirmPassword
+        };
+        const result = registerSchema.safeParse(formData);
+        if (!result.success) {
+            setFormError(result.error.issues[0].message);
+            return;
+        }
+        setFormError("");
+        dispatch(registerRequest(registerData));
     }
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 md:px-10 bg-black/70 backdrop-blur-sm">
@@ -132,7 +169,12 @@ function AuthModal({ onClose, authMode }) {
                                 </p>
                             )}
                             <button type="submit" className="w-full py-3 bg-linear-to-r text-white from-blue-400 to-blue-500 rounded-lg font-medium">
-                                Create Account →
+                                {
+                                    registerLoading ?
+                                        <LuLoaderCircle className="mx-auto size-6 animate-spin" />
+                                        :
+                                        "Create Account →"
+                                }
                             </button>
                         </form>
                     }

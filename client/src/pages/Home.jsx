@@ -5,13 +5,13 @@ import { BsArrowRight } from "react-icons/bs"
 function Home() {
     return (
         <main>
-            <section className="py-10 sm:py-17 bg-linear-to-b from-white to-blue-100 text-neutral-700 w-full max-w-7xl mx-auto relative flex items-center justify-center px-4">
+            <section className="py-10 sm:py-17 bg-linear-to-b from-white to-blue-50 text-neutral-700 w-full max-w-7xl mx-auto relative flex items-center justify-center px-4">
                 <div className="text-center">
-                    <div className="inline-flex backdrop-blur-xl py-1.5 px-5 items-center gap-2 mb-6 rounded-full border-2 border-blue-500 bg-blue-500/15 text-blue-500">
+                    <div className="inline-flex backdrop-blur-xl py-1 sm:py-1.5 px-3 sm:px-5 items-center gap-2 mb-8 rounded-full border-2 border-blue-500 bg-blue-500/15 text-blue-500">
                         <LuZap className="size-4" />
-                        <span className="text-sm font-medium">AI-Powered Career Platform</span>
+                        <span className="text-xs sm:text-sm font-medium">AI-Powered Career Platform</span>
                     </div>
-                    <h1 className="text-[40px] sm:text-5xl flex flex-col md:text-6xl font-semibold leading-tight tracking-tight">
+                    <h1 className="text-[35px] sm:text-5xl flex flex-col md:text-6xl font-semibold leading-[1.1] tracking-tight">
                         <span className="">Land Your Dream Job</span>
                         <span className="bg-linear-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
                             Faster With AI.
@@ -55,13 +55,12 @@ function Home() {
                         {features.map((feature, index) => {
                             const Icon = feature.icon
                             return (
-                                <div key={index} className="group relative rounded-2xl border-2 shadow-lg border-blue-500/10 bg-blue-200 p-6 hover:border-blue-500/30 transition">
-                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_60%)]" />
-                                    <div className="relative flex items-center justify-center w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                                        <Icon className="w-7 h-7 text-blue-500" />
+                                <div key={index} className={`rounded-2xl border shadow-lg border-white ${feature.backgroundColor} p-6`}>
+                                    <div className={`relative flex items-center justify-center w-14 h-14 rounded-xl ${feature.iconBackgroundColor} border border-blue-500/20`}>
+                                        <Icon className="w-7 h-7 text-white" />
                                     </div>
                                     <div className="relative mt-5">
-                                        <h3 className="font-semibold text-blue-500">
+                                        <h3 className="font-semibold text-neutral-800">
                                             {feature.title}
                                         </h3>
                                         <p className="mt-3 text-sm leading-relaxed text-neutral-600 font-medium">

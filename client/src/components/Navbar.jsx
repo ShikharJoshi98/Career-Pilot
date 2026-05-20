@@ -26,7 +26,7 @@ function Navbar() {
                             <div className="w-1.5 h-1.5 ml-1 mb-1.5 rounded-full bg-blue-500"></div>
                         </h1>
                     </div>
-                    <ul className="hidden lg:flex items-center gap-12 text-sm font-medium text-neutral-500">
+                    <ul className="hidden lg:flex items-center gap-20 text-sm font-medium text-neutral-500">
                         {navItems.map((navItem, index) => (
                             <li
                                 key={index}
