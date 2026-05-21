@@ -1,58 +1,75 @@
-import {
-    REGISTER_REQUEST,
-    REGISTER_SUCCESS,
-    REGISTER_FAILURE,
-    CLEAR_AUTH_STATE
-} from "./authTypes";
+import { authTypes } from "./authTypes";
 
 const initialState = {
-    user: null,
-    registerLoading: false,
-    error: null,
     message: null,
-    isAuthenticated: false
+    error: null,
+    loading: false,
+    user: null,
+    isAuthenticated: false,
+    authAction: null
 };
 
-export const authReducer = (
-    state = initialState,
-    action
-) => {
-
+export const authReducer = (state = initialState, action) => {
     switch (action.type) {
-
-        case REGISTER_REQUEST:
+        case authTypes.REGISTER_REQUEST:
             return {
                 ...state,
-                registerLoading: true,
+                loading: true,
                 error: null,
-                message: null
+                message: null,
+                authAction: null
             };
-
-        case REGISTER_SUCCESS:
+        case authTypes.REGISTER_SUCCESS:
             return {
                 ...state,
-                registerLoading: false,
-                user: action.payload.data,
                 message: action.payload.message,
-                error: null
-            };
-
-        case REGISTER_FAILURE:
-            return {
-                ...state,
-                registerLoading: false,
-                error: action.payload,
-                message: null
-            };
-
-        case CLEAR_AUTH_STATE:
-            return {
-                ...state,
+                user: null,
+                loading: false,
                 error: null,
-                message: null
+                authAction: "register-success"
             };
-
+        case authTypes.REGISTER_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+                message: null,
+                authAction: null
+            };
+        case authTypes.LOGIN_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: null,
+                message: null,
+                authAction: null
+            };
+        case authTypes.LOGIN_SUCCESS:
+            return {
+                ...state,
+                message: action.payload.message,
+                user: action.payload.data,
+                isAuthenticated: true,
+                loading: false,
+                error: null,
+                authAction: "login-success"
+            };
+        case authTypes.LOGIN_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+                message: null,
+                authAction: null
+            };
+        case authTypes.CLEAR_AUTH_STATE:
+            return {
+                ...state,
+                message: null,
+                error: null,
+                authAction: null
+            };
         default:
             return state;
     }
-};
+}

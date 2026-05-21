@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react"
 import { LuCircleCheckBig, LuLoaderCircle, LuSparkles, LuX } from "react-icons/lu"
 import Input from "../Input";
-import { registerSchema } from "../../validations/authSchema";
+import { loginSchema, registerSchema } from "../../validations/authSchema";
 import { useDispatch, useSelector } from "react-redux";
-import { clearAuthState, registerRequest } from "../../modules/auth/authAction";
+import { clearAuthState, loginRequest, registerRequest } from "../../modules/auth/authAction";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function AuthModal({ onClose, authMode }) {
     const dispatch = useDispatch();
-    const { message, error, registerLoading } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const { loading, message, error, authAction } = useSelector((state) => state.auth);
     const [isMode, setMode] = useState(authMode);
     const [loginData, setLoginData] = useState({
         email: "",
@@ -25,24 +27,24 @@ function AuthModal({ onClose, authMode }) {
 
     useEffect(() => {
         if (message) {
-            toast.success(message);
+            if (authAction === "register-success") {
+                toast.success(`${message}\n Sign in.`);
+                dispatch(clearAuthState());
+                setMode("login");
+            }
+            if (authAction === "login-success") {
+                toast.success(message);
+                onClose();
+                navigate("/dashboard");
+                dispatch(clearAuthState());
 
-            setRegisterData({
-                name: "",
-                email: "",
-                password: ""
-            });
-
-            setConfirmPassword("");
-
-            dispatch(clearAuthState());
-            return;
+            }
         }
         if (error) {
             toast.error(error);
             dispatch(clearAuthState());
         }
-    }, [message, error, dispatch]);
+    }, [dispatch, message, error, authAction]);
 
     const handleChange = (e, mode) => {
         const { name, value } = e.target;
@@ -61,7 +63,13 @@ function AuthModal({ onClose, authMode }) {
     }
     const handleLoginSubmit = (e) => {
         e.preventDefault();
-        console.log(loginData);
+        const result = loginSchema.safeParse(loginData);
+        if (!result.success) {
+            setLoginError(result.error.issues[0].message);
+            return;
+        }
+        setLoginError("");
+        dispatch(loginRequest(loginData));
     }
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
@@ -76,6 +84,12 @@ function AuthModal({ onClose, authMode }) {
         }
         setFormError("");
         dispatch(registerRequest(registerData));
+        setConfirmPassword("");
+        setRegisterData({
+            name: "",
+            email: "",
+            password: ""
+        });
     }
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 md:px-10 bg-black/70 backdrop-blur-sm">
@@ -144,7 +158,12 @@ function AuthModal({ onClose, authMode }) {
                                 </p>
                             )}
                             <button type="submit" className="mt-6 w-full cursor-pointer py-3 bg-linear-to-r from-blue-400 to-blue-700 text-white rounded-lg font-medium">
-                                Sign In →
+                                {
+                                    loading ?
+                                        <LuLoaderCircle className="size-6 mx-auto animate-spin" />
+                                        :
+                                        "Sign In →"
+                                }
                             </button>
                             <p className="text-sm text-neutral-400 mt-4 text-center">
                                 Don't have an account?{" "}
@@ -170,8 +189,8 @@ function AuthModal({ onClose, authMode }) {
                             )}
                             <button type="submit" className="w-full py-3 bg-linear-to-r text-white from-blue-400 to-blue-500 rounded-lg font-medium">
                                 {
-                                    registerLoading ?
-                                        <LuLoaderCircle className="mx-auto size-6 animate-spin" />
+                                    loading ?
+                                        <LuLoaderCircle className="size-6 mx-auto animate-spin" />
                                         :
                                         "Create Account →"
                                 }

@@ -1,28 +1,49 @@
-import * as types from "./authTypes";
+import { authTypes } from "./authTypes"
 
 export const registerRequest = (credentials) => {
     return {
-        type: types.REGISTER_REQUEST,
+        type: authTypes.REGISTER_REQUEST,
         payload: credentials
-    }
+    };
 }
 
 export const registerSuccess = (data) => {
     return {
-        type: types.REGISTER_SUCCESS,
-        payload: data
-    }
+        type: authTypes.REGISTER_SUCCESS,
+        payload: data      
+    };
 }
 
 export const registerFailure = (error) => {
     return {
-        type: types.REGISTER_FAILURE,
-        payload: error
-    }
+        type: authTypes.REGISTER_FAILURE,
+        payload: error      
+    };
 }
 
 export const clearAuthState = () => {
     return {
-        type: types.CLEAR_AUTH_STATE
+        type: authTypes.CLEAR_AUTH_STATE
     }
+}
+
+export const loginRequest = (credentials) => {
+    return {
+        type: authTypes.LOGIN_REQUEST,
+        payload: credentials
+    }
+}
+
+export const loginSuccess = (data) => {
+    return {
+        type: authTypes.LOGIN_SUCCESS,
+        payload: data      
+    };
+}
+
+export const loginFailure = (error) => {
+    return {
+        type: authTypes.LOGIN_FAILURE,
+        payload: error      
+    };
 }

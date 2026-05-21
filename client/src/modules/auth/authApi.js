@@ -1,7 +1,9 @@
-import { post } from "../../api/apiClient";
+import { post } from "../../api/apiClient"
 
-export const registerUser = (credentials) =>
-    post("/auth/register", credentials);
+export const registerUser = (data) => {
+    return post("/auth/register", data);
+}
 
-export const loginUser = (credentials) =>
-    post("/auth/login", credentials);
+export const loginUser = (data) => {
+    return post("/auth/login", data);
+}
